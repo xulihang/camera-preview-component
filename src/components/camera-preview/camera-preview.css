@@ -25,7 +25,7 @@
   right:0;
 }
 
-.barcode-polygon {
+.polygon {
   fill:rgba(85,240,40,0.5);          
   stroke:green;
   stroke-width:1;

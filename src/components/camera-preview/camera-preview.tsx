@@ -1,4 +1,5 @@
-import { Component, h, State, Prop } from '@stencil/core';
+import { Component, h, State, Prop, Method } from '@stencil/core';
+import { AnalysingResult } from '../../definitions';
 
 @Component({
   tag: 'camera-preview',
@@ -13,8 +14,23 @@ export class CameraPreview {
   interval:any;
   decoding:boolean = false;
   @State() viewBox: string = "0 0 1920 1080";
+  @State() analysingResults: AnalysingResult[];
   @Prop() license?: string;
   @Prop() drawOverlay?: boolean;
+  @Prop() onOpened?: () => void;
+  @Prop() onClosed?: () => void;
+  
+  @Method()
+  async updateAnalysingResults(results:AnalysingResult[]) {
+    console.log("update results:");
+    console.log(results);
+    this.analysingResults = results;
+  }
+
+  @Method()
+  async getVideoElement() {
+    return this.camera;
+  }
 
   async connectedCallback() {
     console.log("connected");
@@ -35,6 +51,9 @@ export class CameraPreview {
 
   onCameraOpened() {
     console.log("on opened");
+    if (this.onOpened) {
+      this.onOpened();
+    }
     this.updateViewBox();
   }
 
@@ -119,13 +138,53 @@ export class CameraPreview {
   close () {
     this.stop();
     this.container.style.display = "none";
+    if (this.onClosed) {
+      this.onClosed();
+    }
   };
+
+  getPointsData = (result:AnalysingResult) => {
+    let pointsData = "";
+    for (let index = 0; index < result.localizationResult.length; index++) {
+      const point = result.localizationResult[index];
+      pointsData = pointsData + point.x + "," + point.y + " "
+    }
+    pointsData = pointsData.trim();
+    return pointsData;
+  }
+
+  renderSVGOverlay(){
+    if (this.drawOverlay === true && this.analysingResults) {
+      return (
+        <svg 
+        viewBox={this.viewBox}
+        xmlns="<http://www.w3.org/2000/svg>"
+        class="overlay fullscreen">
+        {this.analysingResults.map((result,idx) => (
+          <polygon key={"poly-"+idx} xmlns="<http://www.w3.org/2000/svg>"
+          points={this.getPointsData(result)}
+          class="polygon"
+          />
+        ))}
+        {this.analysingResults.map((result,idx) => (
+          <text key={"text-"+idx} xmlns="<http://www.w3.org/2000/svg>"
+          x={result.localizationResult[0].x}
+          y={result.localizationResult[0].y}
+          fill="red"
+          font-size="20"
+          >{result.text}</text>
+        ))}
+      </svg>
+      )
+    }
+  }
 
   render() {
     return (
       <div class="camera-container" ref={(el) => this.container = el}>
         <select onChange={() => this.onCameraChanged()}  id="camera-sel" ref={(el) => this.cameraSelect = el as HTMLSelectElement}></select>
         <button onClick={() => this.close()} id="close-btn">Close</button>
+        {this.renderSVGOverlay()}
         <video class="camera fullscreen" ref={(el) => this.camera = el as HTMLVideoElement} onLoadedData={()=>this.onCameraOpened()} muted autoplay="autoplay" playsinline="playsinline" webkit-playsinline></video>
       </div>
     );
