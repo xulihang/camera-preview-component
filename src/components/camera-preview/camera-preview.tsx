@@ -44,7 +44,7 @@ export class CameraPreview {
   }
 
   @Watch('active')
-  watchPropHandler(newValue: boolean, oldValue: boolean) {
+  watchPropHandler(newValue: boolean) {
     console.log('The new value of active is: ', newValue);
     if (newValue === true) {
       this.playWithDesired();
@@ -104,6 +104,10 @@ export class CameraPreview {
           break;
         } 
       }
+      if (label.toLowerCase().indexOf("back") != -1) { //select back camera by default
+        desiredIndex = i;
+        break;
+      } 
     }
 
     if (devices.length>0) {
@@ -187,6 +191,7 @@ export class CameraPreview {
     if (this.drawOverlay === true && this.analysingResults) {
       return (
         <svg 
+        preserveAspectRatio="xMidYMid slice"
         viewBox={this.viewBox}
         xmlns="<http://www.w3.org/2000/svg>"
         class="overlay full">

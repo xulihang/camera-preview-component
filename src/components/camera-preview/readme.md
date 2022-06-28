@@ -9,16 +9,16 @@
 
 | Property            | Attribute        | Description | Type         | Default     |
 | ------------------- | ---------------- | ----------- | ------------ | ----------- |
+| `active`            | `active`         |             | `boolean`    | `undefined` |
 | `desiredCamera`     | `desired-camera` |             | `string`     | `undefined` |
 | `desiredResolution` | --               |             | `Resolution` | `undefined` |
 | `drawOverlay`       | `draw-overlay`   |             | `boolean`    | `undefined` |
-| `license`           | `license`        |             | `string`     | `undefined` |
 | `onOpened`          | --               |             | `() => void` | `undefined` |
 
 
 ## Methods
 
-### `getCameras() => Promise<MediaDeviceInfo[]>`
+### `getAllCameras() => Promise<MediaDeviceInfo[]>`
 
 
 
