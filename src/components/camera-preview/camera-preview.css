@@ -17,6 +17,7 @@
 #camera-sel {
   z-index:999;
   position:absolute;
+  max-width:30%;
 }
 
 #close-btn {
