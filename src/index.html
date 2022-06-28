@@ -17,7 +17,8 @@
     </style>
   </head>
   <body>
-    <camera-preview>
+    <button id="start-btn" onclick="startCamera()">Start Camera</button>
+    <camera-preview style="display:none">
       <button id="close-btn">Close</button>
     </camera-preview>
     <script>
@@ -31,33 +32,36 @@
 
         const onOpened = () => {
           console.log("opened");
-          loadCameras();
           startDecoding();
-        }
-        const onClosed = () => {
-          console.log("closed");
-          stopDecoding();
         }
 
         cameraElement.onOpened = onOpened;
-        cameraElement.onClosed = onClosed;
         cameraElement.drawOverlay = true;
         cameraElement.desiredCamera = "founder";
         cameraElement.active = false;
         cameraElement.desiredResolution = {width:1280,height:720};
         document.getElementById("close-btn").addEventListener("click",function(){
-          stopDecoding();
-          cameraElement.remove();
+          closeCamera();
         })
 
         reader = await Dynamsoft.DBR.BarcodeReader.createInstance();
         
       }
 
-      async function loadCameras(){
+      function closeCamera(){
+        stopDecoding();
+        cameraElement.active = false;
+        cameraElement.style.display = "none";
+        const startButton = document.querySelector('#start-btn');
+        startButton.style.display = "";
+      }
+
+      function startCamera(){
         const cameraElement = document.querySelector('camera-preview');
-        let cameras = await cameraElement.getAllCameras();
-        console.log(cameras);
+        cameraElement.style.display = "";
+        cameraElement.active = true;
+        const startButton = document.querySelector('#start-btn');
+        startButton.style.display = "none";
       }
 
       function startDecoding(){
