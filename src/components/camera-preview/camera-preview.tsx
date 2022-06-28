@@ -1,5 +1,5 @@
 import { Component, h, State, Prop, Method } from '@stencil/core';
-import { AnalysingResult } from '../../definitions';
+import { AnalysingResult, Resolution } from '../../definitions';
 
 @Component({
   tag: 'camera-preview',
@@ -15,7 +15,7 @@ export class CameraPreview {
   @State() analysingResults: AnalysingResult[];
   @Prop() license?: string;
   @Prop() drawOverlay?: boolean;
-  @Prop() desiredResolution?: string;
+  @Prop() desiredResolution?: Resolution;
   @Prop() desiredCamera?: string;
   @Prop() onOpened?: () => void;
   @Prop() onClosed?: () => void;
@@ -102,11 +102,17 @@ export class CameraPreview {
     }
     let desiredDevice:string|null = this.getDesiredDevice(this.devices)
     if (desiredDevice) {
-      this.play(desiredDevice);
+      if (this.desiredResolution) {
+        this.play(desiredDevice,this.desiredResolution);
+      }else{
+        this.play(desiredDevice);
+      }
+    }else{
+      throw new Error("No camera detected");
     }
   }
 
-  play(deviceId:string) {
+  play(deviceId:string,desiredResolution?:Resolution) {
     console.log("using device id: "+deviceId);
     stop(); // close before play
     var constraints = {};
@@ -122,14 +128,21 @@ export class CameraPreview {
         audio: false
       }
     }
+
+    if (desiredResolution) {
+      constraints["video"]["width"] = desiredResolution.width;
+      constraints["video"]["height"] = desiredResolution.height;
+    }
+    
+
     let pThis = this;
     navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
       pThis.localStream = stream;
       // Attach local stream to video element      
       pThis.camera.srcObject = stream;
     }).catch(function(err) {
-        console.error('getUserMediaError', err, err.stack);
-        alert(err.message);
+      console.error('getUserMediaError', err, err.stack);
+      alert(err.message);
     });
   }
   

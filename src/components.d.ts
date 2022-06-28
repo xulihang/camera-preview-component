@@ -5,11 +5,11 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { AnalysingResult } from "./definitions";
+import { AnalysingResult, Resolution } from "./definitions";
 export namespace Components {
     interface CameraPreview {
         "desiredCamera"?: string;
-        "desiredResolution"?: string;
+        "desiredResolution"?: Resolution;
         "drawOverlay"?: boolean;
         "getCameras": () => Promise<MediaDeviceInfo[]>;
         "getVideoElement": () => Promise<HTMLVideoElement>;
@@ -33,7 +33,7 @@ declare global {
 declare namespace LocalJSX {
     interface CameraPreview {
         "desiredCamera"?: string;
-        "desiredResolution"?: string;
+        "desiredResolution"?: Resolution;
         "drawOverlay"?: boolean;
         "license"?: string;
         "onClosed"?: () => void;

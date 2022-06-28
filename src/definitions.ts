@@ -13,3 +13,8 @@ export interface Point2D{
   x:number;
   y:number;
 }
+
+export interface Resolution{
+  width:number;
+  height:number;
+}
