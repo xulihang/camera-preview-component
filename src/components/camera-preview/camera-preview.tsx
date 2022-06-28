@@ -13,7 +13,6 @@ export class CameraPreview {
   devices!: MediaDeviceInfo[];
   @State() viewBox: string = "0 0 1920 1080";
   @State() analysingResults: AnalysingResult[];
-  @Prop() license?: string;
   @Prop() drawOverlay?: boolean;
   @Prop() desiredResolution?: Resolution;
   @Prop() desiredCamera?: string;
