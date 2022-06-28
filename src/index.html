@@ -9,7 +9,6 @@
     <script nomodule src="/build/camera-preview.js"></script>
     <style>
       #close-btn {
-        z-index:999;
         position:absolute;
         right:0;
         top:0;
@@ -25,6 +24,7 @@
   </head>
   <body>
     <button id="start-btn" onclick="startCamera()">Start Camera</button>
+    
     <camera-preview style="display:none;">
       <button id="close-btn">Close</button>
     </camera-preview>
@@ -32,6 +32,7 @@
       let decoding = false;
       let reader;
       let interval;
+      let scanned = false;
       init();
 
       async function init(){
@@ -73,6 +74,7 @@
       }
 
       function startDecoding(){
+        scanned = false;
         stopDecoding();
         //1000/25=40
         interval = setInterval(decode, 40);
@@ -91,6 +93,13 @@
           try {
             var results = await reader.decode(video);
             await cameraElement.updateAnalysingResults(wrapResults(results));
+
+            if (results.length>0 && scanned === false) {
+              scanned = true;
+              closeCamera();
+              alert(JSON.stringify(results));
+            }
+
           } catch (error) {
             console.log(error);
           }
