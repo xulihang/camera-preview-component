@@ -13,7 +13,6 @@
 | `desiredResolution` | --               |             | `Resolution` | `undefined` |
 | `drawOverlay`       | `draw-overlay`   |             | `boolean`    | `undefined` |
 | `license`           | `license`        |             | `string`     | `undefined` |
-| `onClosed`          | --               |             | `() => void` | `undefined` |
 | `onOpened`          | --               |             | `() => void` | `undefined` |
 
 

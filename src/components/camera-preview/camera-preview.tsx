@@ -18,7 +18,6 @@ export class CameraPreview {
   @Prop() desiredResolution?: Resolution;
   @Prop() desiredCamera?: string;
   @Prop() onOpened?: () => void;
-  @Prop() onClosed?: () => void;
   
   @Method()
   async updateAnalysingResults(results:AnalysingResult[]) {
@@ -31,7 +30,7 @@ export class CameraPreview {
   }
 
   @Method()
-  async getCameras() {
+  async getAllCameras() {
     if (this.devices) {
       return this.devices;
     }else{
@@ -50,6 +49,7 @@ export class CameraPreview {
 
   disconnectedCallback() {
     console.log("dis connected");
+    this.stop();
   }
 
   onCameraOpened() {
@@ -67,30 +67,35 @@ export class CameraPreview {
   async loadDevices(){
     var constraints = {video: true, audio: false};
     await navigator.mediaDevices.getUserMedia(constraints)
-    this.devices = await navigator.mediaDevices.enumerateDevices();
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    var cameraDevices:MediaDeviceInfo[] = [];
+    for (var i=0;i<devices.length;i++){
+      var device = devices[i];
+      if (device.kind == 'videoinput'){ // filter
+        cameraDevices.push(device);
+      }
+    }
+    this.devices = cameraDevices;
+    console.log(this.devices);
   }
 
   getDesiredDevice(devices:MediaDeviceInfo[]){
     var count = 0;
-    var cameraDevices:MediaDeviceInfo[] = [];
     var desiredIndex = 0;
     for (var i=0;i<devices.length;i++){
       var device = devices[i];
-      if (device.kind == 'videoinput'){
-        cameraDevices.push(device);
-        var label = device.label || `Camera ${count++}`;
-        if (this.desiredCamera) {
-          console.log("desired camera:"+this.desiredCamera);
-          if (label.toLowerCase().indexOf(this.desiredCamera.toLowerCase()) != -1) {
-            desiredIndex = cameraDevices.length - 1;
-            break;
-          } 
-        }
+      var label = device.label || `Camera ${count++}`;
+      if (this.desiredCamera) {
+        console.log("desired"+this.desiredCamera);
+        if (label.toLowerCase().indexOf(this.desiredCamera.toLowerCase()) != -1) {
+          desiredIndex = i;
+          break;
+        } 
       }
     }
 
-    if (cameraDevices.length>0) {
-      return cameraDevices[desiredIndex].deviceId;
+    if (devices.length>0) {
+      return devices[desiredIndex].deviceId;
     }else{
       return null;
     }
@@ -153,14 +158,6 @@ export class CameraPreview {
       }
     } catch (e){
       alert(e.message);
-    }
-  };
-
-  close () {
-    this.stop();
-    this.container.style.display = "none";
-    if (this.onClosed) {
-      this.onClosed();
     }
   };
 

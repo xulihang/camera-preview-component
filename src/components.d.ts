@@ -11,10 +11,9 @@ export namespace Components {
         "desiredCamera"?: string;
         "desiredResolution"?: Resolution;
         "drawOverlay"?: boolean;
-        "getCameras": () => Promise<MediaDeviceInfo[]>;
+        "getAllCameras": () => Promise<MediaDeviceInfo[]>;
         "getVideoElement": () => Promise<HTMLVideoElement>;
         "license"?: string;
-        "onClosed"?: () => void;
         "onOpened"?: () => void;
         "updateAnalysingResults": (results: AnalysingResult[]) => Promise<void>;
     }
@@ -36,7 +35,6 @@ declare namespace LocalJSX {
         "desiredResolution"?: Resolution;
         "drawOverlay"?: boolean;
         "license"?: string;
-        "onClosed"?: () => void;
         "onOpened"?: () => void;
     }
     interface IntrinsicElements {

@@ -31,6 +31,7 @@
 
         const onOpened = () => {
           console.log("opened");
+          loadCameras();
           startDecoding();
         }
         const onClosed = () => {
@@ -49,6 +50,13 @@
         })
 
         reader = await Dynamsoft.DBR.BarcodeReader.createInstance();
+        
+      }
+
+      async function loadCameras(){
+        const cameraElement = document.querySelector('camera-preview');
+        let cameras = await cameraElement.getAllCameras();
+        console.log(cameras);
       }
 
       function startDecoding(){
