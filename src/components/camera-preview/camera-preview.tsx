@@ -55,7 +55,7 @@ export class CameraPreview {
   }
 
   componentDidLoad(){
-    if (this.active === true) {
+    if (this.active != false) {
       this.playWithDesired();
     }
   }
