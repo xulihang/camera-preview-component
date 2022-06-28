@@ -10,13 +10,35 @@
     <script src="https://unpkg.com/dynamsoft-javascript-barcode@9.0.2/dist/dbr.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>eruda.init();</script>
+    <style>
+      #close-btn {
+        position:absolute;
+        right:0;
+        top:0;
+      }
+      camera-preview {
+        height:100%;
+        width:100%;
+        position:absolute;
+        right:0;
+        top:0;
+      }
+    </style>
   </head>
   <body>
-    <camera-preview></camera-preview>
+    <div class="controls">
+      <button id="start-btn" onclick="startCamera()">Start Camera</button>
+      <label for="continuous-scan">Continuous Scan</label>
+      <input type="checkbox" id="continuous-scan" name="continuous-scan">
+    </div>
+    <camera-preview style="display:none;">
+      <button id="close-btn">Close</button>
+    </camera-preview>
     <script>
       let decoding = false;
       let reader;
       let interval;
+      let scanned = false;
       init();
 
       async function init(){
@@ -26,18 +48,39 @@
           console.log("opened");
           startDecoding();
         }
-        const onClosed = () => {
-          console.log("closed");
-          stopDecoding();
-        }
 
         cameraElement.onOpened = onOpened;
-        cameraElement.onClosed = onClosed;
         cameraElement.drawOverlay = true;
+        cameraElement.desiredCamera = "founder";
+        cameraElement.active = false;
+        cameraElement.desiredResolution = {width:1280,height:720};
+        document.getElementById("close-btn").addEventListener("click",function(){
+          closeCamera();
+        })
+
         reader = await Dynamsoft.DBR.BarcodeReader.createInstance();
+        
+      }
+
+      function closeCamera(){
+        stopDecoding();
+        const cameraElement = document.querySelector('camera-preview');
+        cameraElement.active = false;
+        cameraElement.style.display = "none";
+        const controls = document.querySelector('.controls');
+        controls.style.display = "";
+      }
+
+      function startCamera(){
+        const cameraElement = document.querySelector('camera-preview');
+        cameraElement.style.display = "";
+        cameraElement.active = true;
+        const controls = document.querySelector('.controls');
+        controls.style.display = "none";
       }
 
       function startDecoding(){
+        scanned = false;
         stopDecoding();
         //1000/25=40
         interval = setInterval(decode, 40);
@@ -48,14 +91,22 @@
       }
 
       async function decode(){
-        if (decoding === false  && reader) {
+        if (decoding === false && reader) {
           console.log("decoding");
+          const continuous = document.querySelector('#continuous-scan').checked;
           const cameraElement = document.querySelector('camera-preview');
           const video = await cameraElement.getVideoElement();
           decoding = true;
           try {
             var results = await reader.decode(video);
             await cameraElement.updateAnalysingResults(wrapResults(results));
+
+            if (results.length>0 && scanned === false && continuous === false) {
+              scanned = true;
+              closeCamera();
+              alert(JSON.stringify(results));
+            }
+
           } catch (error) {
             console.log(error);
           }
