@@ -45,7 +45,7 @@
       }
 
       async function decode(){
-        if (decoding === false) {
+        if (decoding === false && reader) {
           console.log("decoding");
           const cameraElement = document.querySelector('camera-preview');
           const video = await cameraElement.getVideoElement();

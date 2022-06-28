@@ -1,0 +1,84 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
+    <title>Stencil Component Starter</title>
+    <script type="module">
+      import { defineCustomElements } from './loader/index.es2017.js';
+      defineCustomElements();
+    </script>
+    <script src="https://unpkg.com/dynamsoft-javascript-barcode@9.0.2/dist/dbr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
+  </head>
+  <body>
+    <camera-preview></camera-preview>
+    <script>
+      let decoding = false;
+      let reader;
+      let interval;
+      init();
+
+      async function init(){
+        const cameraElement = document.querySelector('camera-preview');
+
+        const onOpened = () => {
+          console.log("opened");
+          startDecoding();
+        }
+        const onClosed = () => {
+          console.log("closed");
+          stopDecoding();
+        }
+
+        cameraElement.onOpened = onOpened;
+        cameraElement.onClosed = onClosed;
+        cameraElement.drawOverlay = true;
+        reader = await Dynamsoft.DBR.BarcodeReader.createInstance();
+      }
+
+      function startDecoding(){
+        stopDecoding();
+        //1000/25=40
+        interval = setInterval(decode, 40);
+      }
+
+      function stopDecoding(){
+        clearInterval(interval);
+      }
+
+      async function decode(){
+        if (decoding === false  && reader) {
+          console.log("decoding");
+          const cameraElement = document.querySelector('camera-preview');
+          const video = await cameraElement.getVideoElement();
+          decoding = true;
+          try {
+            var results = await reader.decode(video);
+            await cameraElement.updateAnalysingResults(wrapResults(results));
+          } catch (error) {
+            console.log(error);
+          }
+          decoding = false;
+        }
+      }
+
+      function wrapResults(results){
+        let analysingResults = [];
+        for (let index = 0; index < results.length; index++) {
+          const result = results[index];
+          let analysingResult = {};
+          analysingResult.text = result.barcodeText;
+          analysingResult.localizationResult = [
+            {x:result.localizationResult.x1,y:result.localizationResult.y1},
+            {x:result.localizationResult.x2,y:result.localizationResult.y2},
+            {x:result.localizationResult.x3,y:result.localizationResult.y3},
+            {x:result.localizationResult.x4,y:result.localizationResult.y4}
+          ];
+          analysingResults.push(analysingResult)
+        }
+        return analysingResults;
+      }
+    </script>
+  </body>
+</html>
