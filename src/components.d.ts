@@ -8,6 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { AnalysingResult, Resolution } from "./definitions";
 export namespace Components {
     interface CameraPreview {
+        "active"?: boolean;
         "desiredCamera"?: string;
         "desiredResolution"?: Resolution;
         "drawOverlay"?: boolean;
@@ -31,6 +32,7 @@ declare global {
 }
 declare namespace LocalJSX {
     interface CameraPreview {
+        "active"?: boolean;
         "desiredCamera"?: string;
         "desiredResolution"?: Resolution;
         "drawOverlay"?: boolean;

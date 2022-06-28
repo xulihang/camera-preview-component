@@ -43,6 +43,7 @@
         cameraElement.onClosed = onClosed;
         cameraElement.drawOverlay = true;
         cameraElement.desiredCamera = "founder";
+        cameraElement.active = false;
         cameraElement.desiredResolution = {width:1280,height:720};
         document.getElementById("close-btn").addEventListener("click",function(){
           stopDecoding();

@@ -1,4 +1,4 @@
-import { Component, h, State, Prop, Method } from '@stencil/core';
+import { Component, h, State, Prop, Method, Watch } from '@stencil/core';
 import { AnalysingResult, Resolution } from '../../definitions';
 
 @Component({
@@ -17,6 +17,7 @@ export class CameraPreview {
   @Prop() drawOverlay?: boolean;
   @Prop() desiredResolution?: Resolution;
   @Prop() desiredCamera?: string;
+  @Prop() active?: boolean;
   @Prop() onOpened?: () => void;
   
   @Method()
@@ -43,8 +44,20 @@ export class CameraPreview {
     console.log("connected");
   }
 
+  @Watch('active')
+  watchPropHandler(newValue: boolean, oldValue: boolean) {
+    console.log('The new value of active is: ', newValue);
+    if (newValue === true) {
+      this.playWithDesired();
+    }else{
+      this.stop();
+    }
+  }
+
   componentDidLoad(){
-    this.playWithDesired();
+    if (this.active === true) {
+      this.playWithDesired();
+    }
   }
 
   disconnectedCallback() {
