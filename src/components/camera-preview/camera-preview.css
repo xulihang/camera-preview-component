@@ -14,21 +14,6 @@
   z-index:998;
 }
 
-#camera-sel {
-  z-index:999;
-  position:absolute;
-  max-width:30%;
-  left:0;
-  top:0;
-}
-
-#close-btn {
-  z-index:999;
-  position:absolute;
-  right:0;
-  top:0;
-}
-
 .polygon {
   fill:rgba(85,240,40,0.5);          
   stroke:green;

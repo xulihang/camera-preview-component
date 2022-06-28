@@ -9,21 +9,19 @@ import { AnalysingResult } from '../../definitions';
 export class CameraPreview {
   container!: HTMLElement;
   localStream!: MediaStream;
-  cameraSelect!: HTMLSelectElement;
   camera!: HTMLVideoElement;
-  interval:any;
-  decoding:boolean = false;
+  devices!: MediaDeviceInfo[];
   @State() viewBox: string = "0 0 1920 1080";
   @State() analysingResults: AnalysingResult[];
   @Prop() license?: string;
   @Prop() drawOverlay?: boolean;
+  @Prop() desiredResolution?: string;
+  @Prop() desiredCamera?: string;
   @Prop() onOpened?: () => void;
   @Prop() onClosed?: () => void;
   
   @Method()
   async updateAnalysingResults(results:AnalysingResult[]) {
-    console.log("update results:");
-    console.log(results);
     this.analysingResults = results;
   }
 
@@ -32,21 +30,26 @@ export class CameraPreview {
     return this.camera;
   }
 
+  @Method()
+  async getCameras() {
+    if (this.devices) {
+      return this.devices;
+    }else{
+      await this.loadDevices();
+      return this.devices;
+    }
+  }
+
   async connectedCallback() {
     console.log("connected");
   }
 
   componentDidLoad(){
-    this.loadDevicesAndPlay();
+    this.playWithDesired();
   }
 
   disconnectedCallback() {
     console.log("dis connected");
-  }
-
-  onCameraChanged(){
-    var deviceId = this.cameraSelect.selectedOptions[0].value;
-    this.play(deviceId);
   }
 
   onCameraOpened() {
@@ -61,43 +64,48 @@ export class CameraPreview {
     this.viewBox = "0 0 "+this.camera.videoWidth+" "+this.camera.videoHeight;
   }
 
-  loadDevicesAndPlay(){
-    console.log(this.cameraSelect);
-    console.log(this.camera);
+  async loadDevices(){
     var constraints = {video: true, audio: false};
-    navigator.mediaDevices.getUserMedia(constraints).then(async stream => {
-      this.localStream = stream;
-      this.cameraSelect.innerHTML="";
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      var count = 0;
-      var cameraDevices = [];
-      var defaultIndex = 0;
-      for (var i=0;i<devices.length;i++){
-          var device = devices[i];
-          if (device.kind == 'videoinput'){
-              cameraDevices.push(device);
-              var label = device.label || `Camera ${count++}`;
-              console.log(this.cameraSelect);
-              console.log(label);
-              this.cameraSelect.add(new Option(label,device.deviceId));
-              if (label.toLowerCase().indexOf("back") != -1) { //select the back camera as the default
-                defaultIndex = cameraDevices.length - 1;
-              }
-              if (label.toLowerCase().indexOf("founder") != -1) { //test desktop camera
-                defaultIndex = cameraDevices.length - 1;
-              }
-          }
-      }
+    await navigator.mediaDevices.getUserMedia(constraints)
+    this.devices = await navigator.mediaDevices.enumerateDevices();
+  }
 
-      if (cameraDevices.length>0) {
-        this.cameraSelect.selectedIndex = defaultIndex;
-        this.play(cameraDevices[defaultIndex].deviceId);
-      }else{
-        alert("No camera detected.");
+  getDesiredDevice(devices:MediaDeviceInfo[]){
+    var count = 0;
+    var cameraDevices:MediaDeviceInfo[] = [];
+    var desiredIndex = 0;
+    for (var i=0;i<devices.length;i++){
+      var device = devices[i];
+      if (device.kind == 'videoinput'){
+        cameraDevices.push(device);
+        var label = device.label || `Camera ${count++}`;
+        if (this.desiredCamera) {
+          console.log("desired camera:"+this.desiredCamera);
+          if (label.toLowerCase().indexOf(this.desiredCamera.toLowerCase()) != -1) {
+            desiredIndex = cameraDevices.length - 1;
+            break;
+          } 
+        }
       }
-    });
+    }
+
+    if (cameraDevices.length>0) {
+      return cameraDevices[desiredIndex].deviceId;
+    }else{
+      return null;
+    }
   }
   
+  async playWithDesired(){
+    if (!this.devices) {
+      await this.loadDevices();
+    }
+    let desiredDevice:string|null = this.getDesiredDevice(this.devices)
+    if (desiredDevice) {
+      this.play(desiredDevice);
+    }
+  }
+
   play(deviceId:string) {
     console.log("using device id: "+deviceId);
     stop(); // close before play
@@ -182,9 +190,8 @@ export class CameraPreview {
   render() {
     return (
       <div class="camera-container" ref={(el) => this.container = el}>
-        <select onChange={() => this.onCameraChanged()}  id="camera-sel" ref={(el) => this.cameraSelect = el as HTMLSelectElement}></select>
-        <button onClick={() => this.close()} id="close-btn">Close</button>
         {this.renderSVGOverlay()}
+        <slot/>
         <video class="camera fullscreen" ref={(el) => this.camera = el as HTMLVideoElement} onLoadedData={()=>this.onCameraOpened()} muted autoplay="autoplay" playsinline="playsinline" webkit-playsinline></video>
       </div>
     );

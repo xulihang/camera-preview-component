@@ -7,9 +7,19 @@
     <script src="https://unpkg.com/dynamsoft-javascript-barcode@9.0.2/dist/dbr.js"></script>
     <script type="module" src="/build/camera-preview.esm.js"></script>
     <script nomodule src="/build/camera-preview.js"></script>
+    <style>
+      #close-btn {
+        z-index:999;
+        position:absolute;
+        right:0;
+        top:0;
+      }
+    </style>
   </head>
   <body>
-    <camera-preview></camera-preview>
+    <camera-preview>
+      <button id="close-btn">Close</button>
+    </camera-preview>
     <script>
       let decoding = false;
       let reader;
@@ -31,6 +41,12 @@
         cameraElement.onOpened = onOpened;
         cameraElement.onClosed = onClosed;
         cameraElement.drawOverlay = true;
+        cameraElement.desiredCamera = "founder";
+        document.getElementById("close-btn").addEventListener("click",function(){
+          stopDecoding();
+          cameraElement.remove();
+        })
+
         reader = await Dynamsoft.DBR.BarcodeReader.createInstance();
       }
 
