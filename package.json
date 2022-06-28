@@ -1,7 +1,7 @@
 {
-  "name": "camera-preview",
+  "name": "camera-preview-component",
   "version": "0.0.1",
-  "description": "Stencil Component Starter",
+  "description": "Camera preview component which can be used for scanning barcodes",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
   "es2015": "dist/esm/index.mjs",
@@ -12,7 +12,7 @@
   "unpkg": "dist/camera-preview/camera-preview.esm.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ionic-team/stencil-component-starter.git"
+    "url": "https://github.com/xulihang/camera-preview-component.git"
   },
   "files": [
     "dist/",
