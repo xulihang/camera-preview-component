@@ -14,11 +14,18 @@
         right:0;
         top:0;
       }
+      camera-preview {
+        height:100%;
+        width:100%;
+        position:absolute;
+        right:0;
+        top:0;
+      }
     </style>
   </head>
   <body>
     <button id="start-btn" onclick="startCamera()">Start Camera</button>
-    <camera-preview style="display:none">
+    <camera-preview style="display:none;">
       <button id="close-btn">Close</button>
     </camera-preview>
     <script>
@@ -50,6 +57,7 @@
 
       function closeCamera(){
         stopDecoding();
+        const cameraElement = document.querySelector('camera-preview');
         cameraElement.active = false;
         cameraElement.style.display = "none";
         const startButton = document.querySelector('#start-btn');

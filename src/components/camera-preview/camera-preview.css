@@ -2,16 +2,21 @@
   display: block;
 }
 
-.fullscreen {
+.full {
   width:100%;
   height:100%;
   position:absolute;
   left:0;
   top:0;
+  resize: both;
 }
 
-.overlay {
-  z-index:998;
+.camera {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .polygon {
