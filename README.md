@@ -43,7 +43,7 @@ const video = await cameraElement.getVideoElement();
 
    ```html
    <script type="module">
-     import { defineCustomElements } from 'https://cdn.jsdelivr.net/npm/camera-preview-component@0.0.1/dist/esm/loader.js';
+     import { defineCustomElements } from 'https://cdn.jsdelivr.net/npm/camera-preview-component@0.0.4/dist/esm/loader.js';
      defineCustomElements();
    </script>
    ```
