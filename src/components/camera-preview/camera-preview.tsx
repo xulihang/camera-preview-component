@@ -217,7 +217,7 @@ export class CameraPreview {
   render() {
     return (
       <div class="camera-container full" ref={(el) => this.container = el}>
-        <video class="camera" ref={(el) => this.camera = el as HTMLVideoElement} onLoadedData={()=>this.onCameraOpened()} muted autoplay="autoplay" playsinline="playsinline" webkit-playsinline></video>
+        <video class="camera full" ref={(el) => this.camera = el as HTMLVideoElement} onLoadedData={()=>this.onCameraOpened()} muted autoplay="autoplay" playsinline="playsinline" webkit-playsinline></video>
         {this.renderSVGOverlay()}
         <slot/>
       </div>
