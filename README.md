@@ -21,7 +21,7 @@ const onOpened = () => {
   console.log("opened");
   startDecoding();
 }
-cameraElement.onOpened = onOpened;
+cameraElement.addEventListener("opened",onOpened);
 cameraElement.drawOverlay = true;
 cameraElement.desiredCamera = "founder";
 cameraElement.active = true;
@@ -43,7 +43,7 @@ const video = await cameraElement.getVideoElement();
 
    ```html
    <script type="module">
-     import { defineCustomElements } from 'https://cdn.jsdelivr.net/npm/camera-preview-component@0.0.4/dist/esm/loader.js';
+     import { defineCustomElements } from 'https://cdn.jsdelivr.net/npm/camera-preview-component@0.0.5/dist/esm/loader.js';
      defineCustomElements();
    </script>
    ```
