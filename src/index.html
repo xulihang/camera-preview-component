@@ -46,7 +46,7 @@
           startDecoding();
         }
 
-        cameraElement.onOpened = onOpened;
+        cameraElement.addEventListener("opened",onOpened);
         cameraElement.drawOverlay = true;
         cameraElement.desiredCamera = "founder";
         cameraElement.active = false;
@@ -96,14 +96,14 @@
           decoding = true;
           try {
             var results = await reader.decode(video);
-            await cameraElement.updateAnalysingResults(wrapResults(results));
-
             if (results.length>0 && scanned === false && continuous === false) {
               scanned = true;
               closeCamera();
               alert(results[0].barcodeText);
+            }else{
+              await cameraElement.updateAnalysingResults(wrapResults(results));
             }
-
+            
           } catch (error) {
             console.log(error);
           }

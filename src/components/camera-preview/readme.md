@@ -13,7 +13,13 @@
 | `desiredCamera`     | `desired-camera` |             | `string`     | `undefined` |
 | `desiredResolution` | --               |             | `Resolution` | `undefined` |
 | `drawOverlay`       | `draw-overlay`   |             | `boolean`    | `undefined` |
-| `onOpened`          | --               |             | `() => void` | `undefined` |
+
+
+## Events
+
+| Event    | Description | Type                |
+| -------- | ----------- | ------------------- |
+| `opened` |             | `CustomEvent<void>` |
 
 
 ## Methods

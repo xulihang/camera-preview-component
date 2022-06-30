@@ -1,4 +1,4 @@
-import { Component, h, State, Prop, Method, Watch } from '@stencil/core';
+import { Component, h, State, Prop, Method, Watch, Event, EventEmitter } from '@stencil/core';
 import { AnalysingResult, Resolution } from '../../definitions';
 
 @Component({
@@ -17,7 +17,7 @@ export class CameraPreview {
   @Prop() desiredResolution?: Resolution;
   @Prop() desiredCamera?: string;
   @Prop() active?: boolean;
-  @Prop() onOpened?: () => void;
+  @Event() opened?: EventEmitter<void>;
   
   @Method()
   async updateAnalysingResults(results:AnalysingResult[]) {
@@ -66,8 +66,8 @@ export class CameraPreview {
 
   onCameraOpened() {
     console.log("on opened");
-    if (this.onOpened) {
-      this.onOpened();
+    if (this.opened) {
+      this.opened.emit();
     }
     this.updateViewBox();
   }

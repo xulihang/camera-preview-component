@@ -14,9 +14,12 @@ export namespace Components {
         "drawOverlay"?: boolean;
         "getAllCameras": () => Promise<MediaDeviceInfo[]>;
         "getVideoElement": () => Promise<HTMLVideoElement>;
-        "onOpened"?: () => void;
         "updateAnalysingResults": (results: AnalysingResult[]) => Promise<void>;
     }
+}
+export interface CameraPreviewCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCameraPreviewElement;
 }
 declare global {
     interface HTMLCameraPreviewElement extends Components.CameraPreview, HTMLStencilElement {
@@ -35,7 +38,7 @@ declare namespace LocalJSX {
         "desiredCamera"?: string;
         "desiredResolution"?: Resolution;
         "drawOverlay"?: boolean;
-        "onOpened"?: () => void;
+        "onOpened"?: (event: CameraPreviewCustomEvent<void>) => void;
     }
     interface IntrinsicElements {
         "camera-preview": CameraPreview;

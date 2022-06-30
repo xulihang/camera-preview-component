@@ -49,7 +49,7 @@
           startDecoding();
         }
 
-        cameraElement.onOpened = onOpened;
+        cameraElement.addEventListener("opened",onOpened);
         cameraElement.drawOverlay = true;
         cameraElement.desiredCamera = "founder";
         cameraElement.active = false;
