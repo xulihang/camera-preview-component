@@ -34,6 +34,8 @@ You can get the inner `video` element using this method:
 const video = await cameraElement.getVideoElement();
 ```
 
+You can learn more about the usage by checking out the [demos](https://github.com/xulihang/camera-preview-demo).
+
 
 ## Install this component
 

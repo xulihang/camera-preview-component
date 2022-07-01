@@ -7,7 +7,6 @@ import { AnalysingResult, Resolution } from '../../definitions';
   shadow: true,
 })
 export class CameraPreview {
-  container!: HTMLElement;
   localStream!: MediaStream;
   camera!: HTMLVideoElement;
   devices!: MediaDeviceInfo[];
@@ -83,7 +82,7 @@ export class CameraPreview {
     var cameraDevices:MediaDeviceInfo[] = [];
     for (var i=0;i<devices.length;i++){
       var device = devices[i];
-      if (device.kind == 'videoinput'){ // filter
+      if (device.kind == 'videoinput'){ // filter out audio devices
         cameraDevices.push(device);
       }
     }
@@ -216,7 +215,7 @@ export class CameraPreview {
 
   render() {
     return (
-      <div class="camera-container full" ref={(el) => this.container = el}>
+      <div class="camera-container full">
         <video class="camera full" ref={(el) => this.camera = el as HTMLVideoElement} onLoadedData={()=>this.onCameraOpened()} muted autoplay="autoplay" playsinline="playsinline" webkit-playsinline></video>
         {this.renderSVGOverlay()}
         <slot/>
