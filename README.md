@@ -5,7 +5,7 @@
 
 This component opens the camera using `getUserMedia`. We can use third-party libraries to add extra frame analysing functions like barcode scanning to it.
 
-[Online demo which scan barcodes](https://singular-madeleine-557145.netlify.app/) using [Dynamsoft Barcode Reader](https://www.dynamsoft.com/barcode-reader/overview/).
+[Online demo which scans barcodes](https://singular-madeleine-557145.netlify.app/) using [Dynamsoft Barcode Reader](https://www.dynamsoft.com/barcode-reader/overview/).
 
 ### Usage
 
