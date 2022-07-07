@@ -19,6 +19,7 @@
 
 | Event    | Description | Type                |
 | -------- | ----------- | ------------------- |
+| `closed` |             | `CustomEvent<void>` |
 | `opened` |             | `CustomEvent<void>` |
 
 

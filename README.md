@@ -5,6 +5,8 @@
 
 This component opens the camera using `getUserMedia`. We can use third-party libraries to add extra frame analysing functions like barcode scanning to it.
 
+[Online demo which scan barcodes](https://singular-madeleine-557145.netlify.app/) using [Dynamsoft Barcode Reader](https://www.dynamsoft.com/barcode-reader/overview/).
+
 ### Usage
 
 In your HTML, add the component:
@@ -19,9 +21,12 @@ You can define the props and events like this:
 const cameraElement = document.querySelector('camera-preview');
 const onOpened = () => {
   console.log("opened");
-  startDecoding();
+}
+const onClosed = () => {
+  console.log("closed");
 }
 cameraElement.addEventListener("opened",onOpened);
+cameraElement.addEventListener("closed",onClosed);
 cameraElement.drawOverlay = true;
 cameraElement.desiredCamera = "founder";
 cameraElement.active = true;
@@ -45,7 +50,7 @@ You can learn more about the usage by checking out the [demos](https://github.co
 
    ```html
    <script type="module">
-     import { defineCustomElements } from 'https://cdn.jsdelivr.net/npm/camera-preview-component@0.0.5/dist/esm/loader.js';
+     import { defineCustomElements } from 'https://cdn.jsdelivr.net/npm/camera-preview-component/dist/esm/loader.js';
      defineCustomElements();
    </script>
    ```
