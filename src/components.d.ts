@@ -38,6 +38,7 @@ declare namespace LocalJSX {
         "desiredCamera"?: string;
         "desiredResolution"?: Resolution;
         "drawOverlay"?: boolean;
+        "onClosed"?: (event: CameraPreviewCustomEvent<void>) => void;
         "onOpened"?: (event: CameraPreviewCustomEvent<void>) => void;
     }
     interface IntrinsicElements {

@@ -46,7 +46,12 @@
           startDecoding();
         }
 
+        const onClosed = () => {
+          console.log("closed");
+        }
+
         cameraElement.addEventListener("opened",onOpened);
+        cameraElement.addEventListener("closed",onClosed);
         cameraElement.drawOverlay = true;
         cameraElement.desiredCamera = "founder";
         cameraElement.active = false;
