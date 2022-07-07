@@ -17,6 +17,7 @@ export class CameraPreview {
   @Prop() desiredCamera?: string;
   @Prop() active?: boolean;
   @Event() opened?: EventEmitter<void>;
+  @Event() closed?: EventEmitter<void>;
   
   @Method()
   async updateAnalysingResults(results:AnalysingResult[]) {
@@ -134,7 +135,7 @@ export class CameraPreview {
 
   play(deviceId:string,desiredResolution?:Resolution) {
     console.log("using device id: "+deviceId);
-    stop(); // close before play
+    this.stop(); // close before play
     var constraints = {};
   
     if (!!deviceId){
@@ -170,6 +171,9 @@ export class CameraPreview {
     try{
       if (this.localStream){
         this.localStream.getTracks().forEach(track => track.stop());
+        if (this.closed) {
+          this.closed.emit();
+        }
       }
     } catch (e){
       alert(e.message);
