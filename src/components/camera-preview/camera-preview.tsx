@@ -186,7 +186,7 @@ export class CameraPreview {
     }).catch(function(err) {
       if (options.facingMode) { // facing mode not supported on desktop Chrome
         delete options["facingMode"];
-        this.play(options);
+        pThis.play(options);
       }else{
         console.error('getUserMediaError', err, err.stack);
       }
