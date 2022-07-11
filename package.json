@@ -1,6 +1,6 @@
 {
   "name": "camera-preview-component",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Camera preview component which can be used for scanning barcodes",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",

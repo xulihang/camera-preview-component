@@ -29,6 +29,7 @@ cameraElement.addEventListener("opened",onOpened);
 cameraElement.addEventListener("closed",onClosed);
 cameraElement.drawOverlay = true;
 cameraElement.desiredCamera = "founder";
+cameraElement.facingMode = "environment";
 cameraElement.active = true;
 cameraElement.desiredResolution = {width:1280,height:720};
 ```
@@ -78,3 +79,15 @@ You can learn more about the usage by checking out the [demos](https://github.co
 - Run `npm install camera-preview-component --save`
 - Add an import to the npm packages `import camera-preview-component;`
 - Then you can use the element anywhere in your template, JSX, html etc
+
+## FAQ
+
+How to specify which camera to use?
+
+1. Use the `desiredCamera` prop. If one of the camera's name contains it, then it will be used. You can get the devices list using the `getAllCameras` method.
+2. Use the `facingMode` prop. Set it to `environment` to use the back camera. Set it to `user` to use the front camera. Please note that this is not supported on Desktop.
+
+You can use the two props together.
+
+
+
