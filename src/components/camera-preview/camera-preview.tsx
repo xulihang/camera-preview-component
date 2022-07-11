@@ -80,25 +80,9 @@ export class CameraPreview {
     this.viewBox = "0 0 "+this.camera.videoWidth+" "+this.camera.videoHeight;
   }
 
-  checkBrowser = () => {
-    // Get the user-agent string
-    let userAgentString = navigator.userAgent;
-    if (userAgentString.indexOf("Chrome") > -1) {
-      return "Chrome";
-    }else if (userAgentString.indexOf("MSIE") > -1 || userAgentString.indexOf("rv:") > -1) {
-      return "IE";
-    }else if (userAgentString.indexOf("Firefox") > -1) {
-      return "Firefox";
-    }else if (userAgentString.indexOf("Safari") > -1) {
-      return "Safari";
-    }
-  }
-
   async loadDevices(){
-    if (this.checkBrowser() === "Safari") {
-      const constraints = {video: true, audio: false};
-      await navigator.mediaDevices.getUserMedia(constraints)
-    }
+    const constraints = {video: true, audio: false};
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
     const devices = await navigator.mediaDevices.enumerateDevices();
     var cameraDevices:MediaDeviceInfo[] = [];
     for (var i=0;i<devices.length;i++){
@@ -108,6 +92,12 @@ export class CameraPreview {
       }
     }
     this.devices = cameraDevices;
+
+    const tracks = stream.getTracks();
+    for (let i=0;i<tracks.length;i++) {
+      const track = tracks[i];
+      track.stop();
+    }
   }
 
   getDesiredDevice(devices:MediaDeviceInfo[]){
@@ -196,7 +186,11 @@ export class CameraPreview {
   stop () {
     try{
       if (this.localStream){
-        this.localStream.getTracks().forEach(track => track.stop());
+        const tracks = this.localStream.getTracks();
+        for (let i=0;i<tracks.length;i++) {
+          const track = tracks[i];
+          track.stop();
+        }
         if (this.closed) {
           this.closed.emit();
         }

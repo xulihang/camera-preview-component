@@ -47,13 +47,15 @@
         const onOpened = async () => {
           console.log("opened");
           let cameras = await cameraElement.getAllCameras();
-          console.log(cameras);
+          for (var i=0;i<cameras.length;i++) {
+            console.log(cameras[i].label);
+          }
           startDecoding();
         }
 
         cameraElement.addEventListener("opened",onOpened);
         cameraElement.drawOverlay = true;
-        cameraElement.desiredCamera = "founder";
+        cameraElement.desiredCamera = "back";
         cameraElement.facingMode = "environment";
         cameraElement.active = false;
         cameraElement.desiredResolution = {width:1280,height:720};
