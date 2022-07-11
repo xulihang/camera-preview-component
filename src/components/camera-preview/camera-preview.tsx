@@ -1,6 +1,12 @@
 import { Component, h, State, Prop, Method, Watch, Event, EventEmitter } from '@stencil/core';
 import { AnalysingResult, Resolution } from '../../definitions';
 
+interface Options {
+  deviceId?:string;
+  facingMode?:string;
+  desiredResolution?:Resolution;
+}
+
 @Component({
   tag: 'camera-preview',
   styleUrl: 'camera-preview.css',
@@ -15,6 +21,7 @@ export class CameraPreview {
   @Prop() drawOverlay?: boolean;
   @Prop() desiredResolution?: Resolution;
   @Prop() desiredCamera?: string;
+  @Prop() facingMode?: string;
   @Prop() active?: boolean;
   @Event() opened?: EventEmitter<void>;
   @Event() closed?: EventEmitter<void>;
@@ -130,23 +137,24 @@ export class CameraPreview {
     }
     let desiredDevice:string|null = this.getDesiredDevice(this.devices)
     if (desiredDevice) {
+      let options:Options = {};
+      options.deviceId = desiredDevice;
       if (this.desiredResolution) {
-        this.play(desiredDevice,this.desiredResolution);
-      }else{
-        this.play(desiredDevice);
+        options.desiredResolution = this.desiredResolution;
       }
+      this.play(options);
     }else{
       throw new Error("No camera detected");
     }
   }
 
-  play(deviceId:string,desiredResolution?:Resolution) {
+  play(options:Options) {
     this.stop(); // close before play
     var constraints = {};
   
-    if (!!deviceId){
+    if (options.deviceId){
       constraints = {
-        video: {deviceId: deviceId},
+        video: {deviceId: options.deviceId},
         audio: false
       }
     }else{
@@ -156,9 +164,14 @@ export class CameraPreview {
       }
     }
 
-    if (desiredResolution) {
-      constraints["video"]["width"] = desiredResolution.width;
-      constraints["video"]["height"] = desiredResolution.height;
+    if (options.facingMode) {
+      delete constraints["video"]["deviceId"];
+      constraints["video"]["facingMode"] = { exact: options.facingMode };
+    }
+
+    if (options.desiredResolution) {
+      constraints["video"]["width"] = options.desiredResolution.width;
+      constraints["video"]["height"] = options.desiredResolution.height;
     }
     
 

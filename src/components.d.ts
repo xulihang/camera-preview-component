@@ -12,6 +12,7 @@ export namespace Components {
         "desiredCamera"?: string;
         "desiredResolution"?: Resolution;
         "drawOverlay"?: boolean;
+        "facingMode"?: string;
         "getAllCameras": () => Promise<MediaDeviceInfo[]>;
         "getVideoElement": () => Promise<HTMLVideoElement>;
         "updateAnalysingResults": (results: AnalysingResult[]) => Promise<void>;
@@ -38,6 +39,7 @@ declare namespace LocalJSX {
         "desiredCamera"?: string;
         "desiredResolution"?: Resolution;
         "drawOverlay"?: boolean;
+        "facingMode"?: string;
         "onClosed"?: (event: CameraPreviewCustomEvent<void>) => void;
         "onOpened"?: (event: CameraPreviewCustomEvent<void>) => void;
     }

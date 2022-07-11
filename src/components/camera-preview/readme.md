@@ -13,6 +13,7 @@
 | `desiredCamera`     | `desired-camera` |             | `string`     | `undefined` |
 | `desiredResolution` | --               |             | `Resolution` | `undefined` |
 | `drawOverlay`       | `draw-overlay`   |             | `boolean`    | `undefined` |
+| `facingMode`        | `facing-mode`    |             | `string`     | `undefined` |
 
 
 ## Events
