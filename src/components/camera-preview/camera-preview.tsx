@@ -142,6 +142,9 @@ export class CameraPreview {
       if (this.desiredResolution) {
         options.desiredResolution = this.desiredResolution;
       }
+      if (this.facingMode) {
+        options.facingMode = this.facingMode;
+      }
       this.play(options);
     }else{
       throw new Error("No camera detected");

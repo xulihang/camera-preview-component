@@ -52,7 +52,7 @@
         cameraElement.addEventListener("opened",onOpened);
         cameraElement.drawOverlay = true;
         cameraElement.desiredCamera = "back";
-        console.log(cameraElement.desiredCamera);
+        cameraElement.facingMode = "environment";
         cameraElement.active = false;
         cameraElement.desiredResolution = {width:1280,height:720};
         document.getElementById("close-btn").addEventListener("click",function(){
