@@ -44,14 +44,16 @@
       async function init(){
         const cameraElement = document.querySelector('camera-preview');
 
-        const onOpened = () => {
+        const onOpened = async () => {
           console.log("opened");
+          let cameras = await cameraElement.getAllCameras();
+          console.log(cameras);
           startDecoding();
         }
 
         cameraElement.addEventListener("opened",onOpened);
         cameraElement.drawOverlay = true;
-        cameraElement.desiredCamera = "back";
+        cameraElement.desiredCamera = "founder";
         cameraElement.facingMode = "environment";
         cameraElement.active = false;
         cameraElement.desiredResolution = {width:1280,height:720};
