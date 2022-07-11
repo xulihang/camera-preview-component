@@ -45,7 +45,6 @@ export class CameraPreview {
 
   @Watch('active')
   watchPropHandler(newValue: boolean) {
-    console.log('The new value of active is: ', newValue);
     if (newValue === true) {
       this.playWithDesired();
     }else{
@@ -60,12 +59,10 @@ export class CameraPreview {
   }
 
   disconnectedCallback() {
-    console.log("dis connected");
     this.stop();
   }
 
   onCameraOpened() {
-    console.log("on opened");
     if (this.opened) {
       this.opened.emit();
     }
@@ -104,7 +101,6 @@ export class CameraPreview {
       }
     }
     this.devices = cameraDevices;
-    console.log(this.devices);
   }
 
   getDesiredDevice(devices:MediaDeviceInfo[]){
@@ -114,16 +110,11 @@ export class CameraPreview {
       var device = devices[i];
       var label = device.label || `Camera ${count++}`;
       if (this.desiredCamera) {
-        console.log("desired"+this.desiredCamera);
         if (label.toLowerCase().indexOf(this.desiredCamera.toLowerCase()) != -1) {
           desiredIndex = i;
           break;
         } 
       }
-      if (label.toLowerCase().indexOf("back") != -1) { //select back camera by default
-        desiredIndex = i;
-        break;
-      } 
     }
 
     if (devices.length>0) {
@@ -150,7 +141,6 @@ export class CameraPreview {
   }
 
   play(deviceId:string,desiredResolution?:Resolution) {
-    console.log("using device id: "+deviceId);
     this.stop(); // close before play
     var constraints = {};
   
