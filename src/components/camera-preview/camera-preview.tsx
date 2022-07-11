@@ -184,8 +184,12 @@ export class CameraPreview {
       // Attach local stream to video element      
       pThis.camera.srcObject = stream;
     }).catch(function(err) {
-      console.error('getUserMediaError', err, err.stack);
-      alert(err.message);
+      if (options.facingMode) { // facing mode not supported on desktop Chrome
+        delete options["facingMode"];
+        this.play(options);
+      }else{
+        console.error('getUserMediaError', err, err.stack);
+      }
     });
   }
   
