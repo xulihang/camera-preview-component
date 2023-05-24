@@ -34,11 +34,18 @@ cameraElement.active = true;
 cameraElement.desiredResolution = {width:1280,height:720};
 ```
 
-You can get the inner `video` element using this method:
+You can get the inner `video` element using the `getVideoElement` method:
 
 ```js
 const video = await cameraElement.getVideoElement();
 ```
+
+You can take a photo using the `takePhoto` method:
+
+```js
+const blob = await cameraElement.takePhoto(true); //pass true to try to use the ImageCapture API if supported
+```
+
 
 You can learn more about the usage by checking out the [demos](https://github.com/xulihang/camera-preview-demo).
 

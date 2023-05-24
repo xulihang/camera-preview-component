@@ -46,6 +46,16 @@ Type: `Promise<HTMLVideoElement>`
 
 
 
+### `takePhoto(tryImageCapture?: boolean) => Promise<Blob>`
+
+
+
+#### Returns
+
+Type: `Promise<Blob>`
+
+
+
 ### `updateAnalysingResults(results: AnalysingResult[]) => Promise<void>`
 
 
