@@ -12,6 +12,13 @@
         position:absolute;
         right:0;
         top:0;
+        height: 20px;
+      }
+      #take-photo-btn {
+        position:absolute;
+        right:0;
+        top:20px;
+        height: 20px;
       }
       camera-preview {
         height:100%;
@@ -27,9 +34,11 @@
       <button id="start-btn" onclick="startCamera()">Start Camera</button>
       <label for="continuous-scan">Continuous Scan</label>
       <input type="checkbox" id="continuous-scan" name="continuous-scan">
+      <img id="image-taken"/>
     </div>
     <camera-preview style="display:none;">
       <button id="close-btn">Close</button>
+      <button id="take-photo-btn">Take Photo</button>
     </camera-preview>
     <script>
       let decoding = false;
@@ -60,8 +69,20 @@
           closeCamera();
         })
 
+        document.getElementById("take-photo-btn").addEventListener("click",function(){
+          takePhoto();
+        })
+
         reader = await Dynamsoft.DBR.BarcodeReader.createInstance();
         
+      }
+
+      async function takePhoto(){
+        const cameraElement = document.querySelector('camera-preview');
+        const blob = await cameraElement.takePhoto(true);
+        const src = URL.createObjectURL(blob);
+        document.getElementById("image-taken").src = src;
+        closeCamera();
       }
 
       function closeCamera(){

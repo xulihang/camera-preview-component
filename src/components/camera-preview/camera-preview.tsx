@@ -15,7 +15,9 @@ interface Options {
 export class CameraPreview {
   localStream!: MediaStream;
   camera!: HTMLVideoElement;
+  imageCapture!: any;
   devices!: MediaDeviceInfo[];
+  canvas!: HTMLCanvasElement;
   @State() viewBox: string = "0 0 1920 1080";
   @State() analysingResults: AnalysingResult[];
   @Prop() drawOverlay?: boolean;
@@ -44,6 +46,39 @@ export class CameraPreview {
       await this.loadDevices();
       return this.devices;
     }
+  }
+
+  @Method()
+  async takePhoto(tryImageCapture?:boolean) {
+    let blob:Blob;
+    if (tryImageCapture && this.imageCapture) {
+      blob = await this.imageCapture.takePhoto();
+    }else{
+      blob = await this.captureFrame();
+    }
+    return blob;
+  }
+
+  captureFrame():Promise<Blob>{
+    let pThis = this;
+    return new Promise(function (resolve, reject) {
+      try {
+        if (!pThis.canvas) {
+          pThis.canvas = document.createElement("canvas");
+        }
+        let w = this.camera.videoWidth;
+        let h = this.camera.videoHeight;
+        pThis.canvas.width  = w;
+        pThis.canvas.height = h;
+        let ctx = pThis.canvas.getContext('2d');
+        ctx.drawImage(this.camera, 0, 0, w, h);
+        pThis.canvas.toBlob(function(blob){
+          resolve(blob)
+        });  
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
   async connectedCallback() {
@@ -173,6 +208,15 @@ export class CameraPreview {
       pThis.localStream = stream;
       // Attach local stream to video element      
       pThis.camera.srcObject = stream;
+      if ("ImageCapture" in window) {
+        console.log("ImageCapture supported");
+        const ImageCapture:any = window["ImageCapture"];
+        const track = stream.getVideoTracks()[0];
+        pThis.imageCapture = new ImageCapture(track);
+      }else{
+        console.log("ImageCapture not supported");
+        pThis.imageCapture = null;
+      }
     }).catch(function(err) {
       if (options.facingMode) { // facing mode not supported on desktop Chrome
         delete options["facingMode"];

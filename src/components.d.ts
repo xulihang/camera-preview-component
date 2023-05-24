@@ -15,6 +15,7 @@ export namespace Components {
         "facingMode"?: string;
         "getAllCameras": () => Promise<MediaDeviceInfo[]>;
         "getVideoElement": () => Promise<HTMLVideoElement>;
+        "takePhoto": (tryImageCapture?: boolean) => Promise<Blob>;
         "updateAnalysingResults": (results: AnalysingResult[]) => Promise<void>;
     }
 }
