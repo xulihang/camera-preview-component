@@ -3,6 +3,10 @@
 
 ## Camera Preview Web Component
 
+![version](https://img.shields.io/npm/v/camera-preview-component.svg)
+![downloads](https://img.shields.io/npm/dm/camera-preview-component.svg)
+![jsdelivr](https://img.shields.io/jsdelivr/npm/hm/camera-preview-component.svg)
+
 This component opens the camera using `getUserMedia`. We can use third-party libraries to add extra frame analysing functions like barcode scanning to it.
 
 [Online demo which scans barcodes](https://singular-madeleine-557145.netlify.app/) using [Dynamsoft Barcode Reader](https://www.dynamsoft.com/barcode-reader/overview/).
